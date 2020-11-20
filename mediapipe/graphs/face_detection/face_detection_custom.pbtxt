@@ -1,29 +1,26 @@
-# MediaPipe graph that performs face mesh with TensorFlow Lite on GPU.
+# MediaPipe graph that performs face detection with TensorFlow Lite on GPU.
+# Used in the examples in
+# mediapipie/examples/android/src/java/com/mediapipe/apps/facedetectiongpu and
+# mediapipie/examples/ios/facedetectiongpu.
 
-# GPU buffer. (GpuBuffer)
+# Images on GPU coming into and out of the graph.
 input_stream: "input_video"
-
-# Output image with rendered results. (GpuBuffer)
-output_stream: "output_video"
-# Detected faces. (std::vector<Detection>)
 output_stream: "face_detections"
-
-profiler_config {
-  trace_enabled: true
-  enable_profiler: true
-  trace_log_interval_count: 200
-}
+output_stream: "output_video"
 
 # Throttles the images flowing downstream for flow control. It passes through
-# the very first incoming image unaltered, and waits for downstream nodes
-# (calculators and subgraphs) in the graph to finish their tasks before it
-# passes through another image. All images that come in while waiting are
-# dropped, limiting the number of in-flight images in most part of the graph to
-# 1. This prevents the downstream nodes from queuing up incoming images and data
-# excessively, which leads to increased latency and memory usage, unwanted in
-# real-time mobile applications. It also eliminates unnecessarily computation,
-# e.g., the output produced by a node may get dropped downstream if the
-# subsequent nodes are still busy processing previous inputs.
+# the very first incoming image unaltered, and waits for
+# TfLiteTensorsToDetectionsCalculator downstream in the graph to finish
+# generating the corresponding detections before it passes through another
+# image. All images that come in while waiting are dropped, limiting the number
+# of in-flight images between this calculator and
+# TfLiteTensorsToDetectionsCalculator to 1. This prevents the nodes in between
+# from queuing up incoming images and data excessively, which leads to increased
+# latency and memory usage, unwanted in real-time mobile applications. It also
+# eliminates unnecessarily computation, e.g., a transformed image produced by
+# ImageTransformationCalculator may get dropped downstream if the subsequent
+# TfLiteConverterCalculator or TfLiteInferenceCalculator is still busy
+# processing previous inputs.
 node {
   calculator: "FlowLimiterCalculator"
   input_stream: "input_video"

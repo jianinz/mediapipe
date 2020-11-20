@@ -95,6 +95,13 @@ cat > $(OUTS) <<EOF
     )
 
     _proto_java_src_generator(
+        name = "rect_proto",
+        proto_src = "mediapipe/framework/formats/rect.proto",
+        java_lite_out = "com/google/mediapipe/formats/proto/RectProto.java",
+        srcs = ["//mediapipe/framework/formats:protos_src"],
+    )
+
+    _proto_java_src_generator(
         name = "rasterization_proto",
         proto_src = "mediapipe/framework/formats/annotation/rasterization.proto",
         java_lite_out = "com/google/mediapipe/formats/annotation/proto/RasterizationProto.java",
@@ -121,6 +128,33 @@ cat > $(OUTS) <<EOF
         ],
     )
 
+    _proto_java_src_generator(
+        name = "matrix_data_proto",
+        proto_src = "mediapipe/framework/formats/matrix_data.proto",
+        java_lite_out = "com/google/mediapipe/formats/proto/MatrixDataProto.java",
+        srcs = ["//mediapipe/framework/formats:protos_src"],
+    )
+
+    _proto_java_src_generator(
+        name = "face_geometry_proto",
+        proto_src = "mediapipe/modules/face_geometry/protos/face_geometry.proto",
+        java_lite_out = "com/google/mediapipe/modules/facegeometry/FaceGeometryProto.java",
+        srcs = [
+            "//mediapipe/framework/formats:protos_src",
+            "//mediapipe/modules/face_geometry/protos:protos_src",
+        ],
+    )
+
+    _proto_java_src_generator(
+        name = "mesh3d_proto",
+        proto_src = "mediapipe/modules/face_geometry/protos/mesh_3d.proto",
+        java_lite_out = "com/google/mediapipe/modules/facegeometry/Mesh3dProto.java",
+        srcs = [
+            "//mediapipe/framework/formats:protos_src",
+            "//mediapipe/modules/face_geometry/protos:protos_src",
+       ],
+    )
+
     android_library(
         name = name + "_android_lib",
         srcs = [
@@ -129,9 +163,13 @@ cat > $(OUTS) <<EOF
             "//mediapipe/java/com/google/mediapipe/glutil:java_src",
             "com/google/mediapipe/proto/CalculatorProto.java",
             "com/google/mediapipe/formats/proto/LandmarkProto.java",
+            "com/google/mediapipe/formats/proto/RectProto.java",
             "com/google/mediapipe/formats/proto/DetectionProto.java",
             "com/google/mediapipe/formats/proto/LocationDataProto.java",
             "com/google/mediapipe/formats/annotation/proto/RasterizationProto.java",
+	        "com/google/mediapipe/formats/proto/MatrixDataProto.java",
+	        "com/google/mediapipe/modules/facegeometry/FaceGeometryProto.java",
+	        "com/google/mediapipe/modules/facegeometry/Mesh3dProto.java",
         ],
         manifest = "AndroidManifest.xml",
         proguard_specs = ["//mediapipe/java/com/google/mediapipe/framework:proguard.pgcfg"],

@@ -135,7 +135,6 @@ class EffectRendererCalculator : public CalculatorBase {
                        CreateEffectRenderer(environment, effect_mesh_3d,
                                             std::move(effect_texture)),
                        _ << "Failed to create the effect renderer!");
-
       return mediapipe::OkStatus();
     });
   }
@@ -187,7 +186,6 @@ class EffectRendererCalculator : public CalculatorBase {
           .Tag(kImageGpuTag)
           .AddPacket(mediapipe::Adopt<GpuBuffer>(output_gpu_buffer.release())
                          .At(cc->InputTimestamp()));
-
       output_gl_texture.Release();
       input_gl_texture.Release();
 
@@ -240,7 +238,6 @@ class EffectRendererCalculator : public CalculatorBase {
                                   ImageFrame::kGlDefaultAlignmentBoundary);
 
     output_mat.copyTo(formats::MatView(&output_image_frame));
-
     return output_image_frame;
   }
 

@@ -1,4 +1,4 @@
-# Copyright 2020 The MediaPipe Authors.
+# Copyright 2019 The MediaPipe Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,23 +22,23 @@ licenses(["notice"])
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
-    name = "face_effect_gpu_deps",
+    name = "mobile_calculators",
     deps = [
         "//mediapipe/calculators/core:flow_limiter_calculator",
-        "//mediapipe/calculators/core:gate_calculator",
-        "//mediapipe/calculators/core:immediate_mux_calculator",
         "//mediapipe/calculators/image:image_properties_calculator",
-        "//mediapipe/graphs/face_effect/subgraphs:single_face_smooth_landmark_gpu",
+        "//mediapipe/modules/face_landmark:face_landmark_front_gpu",
         "//mediapipe/modules/face_geometry",
         "//mediapipe/modules/face_geometry:effect_renderer_calculator",
         "//mediapipe/modules/face_geometry:env_generator_calculator",
+        "//mediapipe/modules/face_detection:face_detection_front_cpu",
+        "//mediapipe/modules/face_detection:face_detection_front_gpu",
         "//mediapipe/gpu:gpu_buffer_to_image_frame_calculator",
     ],
 )
 
 mediapipe_binary_graph(
-    name = "face_effect_gpu_binary_graph",
-    graph = "face_effect_gpu_custom.pbtxt",
-    output_name = "face_effect_gpu.binarypb",
-    deps = [":face_effect_gpu_deps"],
+    name = "face_consolidated_mobile_gpu_binary_graph",
+    graph = "face_consolidated.pbtxt",
+    output_name = "face_consolidated_mobile_gpu.binarypb",
+    deps = [":mobile_calculators"],
 )
