@@ -21,6 +21,7 @@
 #include "mediapipe/framework/camera_intrinsics.h"
 #include "mediapipe/framework/formats/image_format.pb.h"
 #include "mediapipe/framework/formats/image_frame.h"
+#include "mediapipe/util/image_frame_util.h"
 #include "mediapipe/framework/formats/matrix.h"
 #include "mediapipe/framework/formats/time_series_header.pb.h"
 #include "mediapipe/framework/formats/video_stream_header.h"
@@ -178,6 +179,22 @@ JNIEXPORT jlong JNICALL PACKET_CREATOR_METHOD(nativeCreateRgbaImageFrame)(
   std::memcpy(image_frame->MutablePixelData(), rgba_data,
               image_frame->PixelDataSize());
   mediapipe::Packet packet = mediapipe::Adopt(image_frame.release());
+  return CreatePacketWithContext(context, packet);
+}
+
+JNIEXPORT jlong JNICALL PACKET_CREATOR_METHOD(nativeCreateYuvImageFrame)(
+    JNIEnv* env, jobject thiz, jlong context, jobject y_byte_buffer,
+    jobject u_byte_buffer, jobject v_byte_buffer, jint uv_stride,
+    jint width, jint height) {
+  uint8* y_data = (uint8*)env->GetDirectBufferAddress(y_byte_buffer);
+  uint8* u_data = (uint8*)env->GetDirectBufferAddress(u_byte_buffer);
+  uint8* v_data = (uint8*)env->GetDirectBufferAddress(v_byte_buffer);
+  auto imageFrame = absl::make_unique<::mediapipe::ImageFrame>(
+      mediapipe::ImageFormat::SRGBA, width, height, 8);
+  mediapipe::image_frame_util::YUVToRgbaImageFrame(y_data,
+                              u_data, v_data, uv_stride,
+                              width, height, imageFrame.get());
+  mediapipe::Packet packet = mediapipe::Adopt(imageFrame.release());
   return CreatePacketWithContext(context, packet);
 }
 
