@@ -43,11 +43,8 @@ node: {
 node: {
   calculator: "ImageTransformationCalculator"
   input_stream: "IMAGE_GPU:throttled_input_video_gpu"
-  input_stream: "ROTATION_DEGREES:image_rotation"
-  input_stream: "FLIP_HORIZONTALLY:flip_x"
-  input_stream_handler {
-    input_stream_handler: "ImmediateInputStreamHandler"
-  }
+  input_side_packet: "ROTATION_DEGREES:image_rotation"
+  input_side_packet: "FLIP_HORIZONTALLY:flip_x"
   output_stream: "IMAGE_GPU:throttled_transformed_input_video_gpu"
   node_options: {
     [type.googleapis.com/mediapipe.ImageTransformationCalculatorOptions] {
