@@ -260,7 +260,7 @@ REGISTER_CALCULATOR(ImageTransformationCalculator);
 ::mediapipe::Status ImageTransformationCalculator::Open(CalculatorContext* cc) {
   // Inform the framework that we always output at the same timestamp
   // as we receive a packet at.
-  cc->SetOffset(TimestampDiff(0));
+  // cc->SetOffset(TimestampDiff(0));
 
   options_ = cc->Options<ImageTransformationCalculatorOptions>();
 
