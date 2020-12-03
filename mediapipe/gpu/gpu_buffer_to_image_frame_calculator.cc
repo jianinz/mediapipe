@@ -35,7 +35,6 @@ class GpuBufferToImageFrameCalculator : public CalculatorBase {
 
   ::mediapipe::Status Open(CalculatorContext* cc) override;
   ::mediapipe::Status Process(CalculatorContext* cc) override;
-
  private:
 #if !MEDIAPIPE_GPU_BUFFER_USE_CV_PIXEL_BUFFER
   GlCalculatorHelper helper_;
@@ -98,7 +97,6 @@ REGISTER_CALCULATOR(GpuBufferToImageFrameCalculator);
     return ::mediapipe::OkStatus();
   }
 #endif  // defined(HAVE_GPU_BUFFER)
-
   return ::mediapipe::Status(::mediapipe::StatusCode::kInvalidArgument,
                              "Input packets must be ImageFrame or GpuBuffer.");
 }
